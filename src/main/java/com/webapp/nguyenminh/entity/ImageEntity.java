@@ -17,7 +17,7 @@ import lombok.ToString;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "blog_image")
+@Table(name = "image")
 public class ImageEntity {
 	@Id
 	@GeneratedValue(generator = "uuid2")
