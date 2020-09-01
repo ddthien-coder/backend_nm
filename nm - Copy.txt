@@ -1,0 +1,190 @@
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               10.5.4-MariaDB - mariadb.org binary distribution
+-- Server OS:                    Win64
+-- HeidiSQL Version:             11.0.0.6083
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+-- Dumping database structure for nguyenminh
+CREATE DATABASE IF NOT EXISTS `nguyenminh` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
+USE `nguyenminh`;
+
+-- Dumping structure for table nguyenminh.image
+CREATE TABLE IF NOT EXISTS `image` (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `file_name` varchar(100) NOT NULL,
+  `file_type` varchar(10) NOT NULL,
+  `data` mediumblob DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table nguyenminh.image: ~0 rows (approximately)
+/*!40000 ALTER TABLE `image` DISABLE KEYS */;
+/*!40000 ALTER TABLE `image` ENABLE KEYS */;
+
+-- Dumping structure for table nguyenminh.informationcty
+CREATE TABLE IF NOT EXISTS `informationcty` (
+  `id` varchar(200) NOT NULL,
+  `title` varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `diachi` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` text CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `img_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `img_id` (`img_id`),
+  CONSTRAINT `FK_informationcty_blog_image` FOREIGN KEY (`img_id`) REFERENCES `image` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table nguyenminh.informationcty: ~0 rows (approximately)
+/*!40000 ALTER TABLE `informationcty` DISABLE KEYS */;
+/*!40000 ALTER TABLE `informationcty` ENABLE KEYS */;
+
+-- Dumping structure for table nguyenminh.menu
+CREATE TABLE IF NOT EXISTS `menu` (
+  `id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT uuid(),
+  `name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `to` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sub_id` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sub_id` (`sub_id`),
+  CONSTRAINT `FK__sub_menu` FOREIGN KEY (`sub_id`) REFERENCES `sub_menu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table nguyenminh.menu: ~3 rows (approximately)
+/*!40000 ALTER TABLE `menu` DISABLE KEYS */;
+INSERT INTO `menu` (`id`, `name`, `to`, `sub_id`) VALUES
+	('b4f69a59-e8e3-11ea-99b3-54e1ad6637c3', 'Trang Chủ', NULL, NULL),
+	('be5b5072-e8e3-11ea-99b3-54e1ad6637c3', 'Giới Thiệu', NULL, NULL),
+	('c2012ee5-e8e3-11ea-99b3-54e1ad6637c3', 'Dịch Vụ', NULL, '892aeaea-e8e3-11ea-99b3-54e1ad6637c3');
+/*!40000 ALTER TABLE `menu` ENABLE KEYS */;
+
+-- Dumping structure for table nguyenminh.product
+CREATE TABLE IF NOT EXISTS `product` (
+  `id` varchar(250) COLLATE utf8_unicode_ci NOT NULL DEFAULT uuid(),
+  `category_id` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `unit` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `amount` int(11) DEFAULT NULL,
+  `schedule` int(11) DEFAULT NULL,
+  `times_per_day` int(11) DEFAULT NULL,
+  `duration_in_days` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `FK_product_product_category` FOREIGN KEY (`category_id`) REFERENCES `product_category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table nguyenminh.product: ~0 rows (approximately)
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` (`id`, `category_id`, `name`, `unit`, `amount`, `schedule`, `times_per_day`, `duration_in_days`) VALUES
+	('333c6cd2-ec26-11ea-94e4-54e1ad6637c3', '10bf601f-ec25-11ea-94e4-54e1ad6637c3', 'Cat', 'cups', 3, 3, 3, 3),
+	('e828ef74-ec25-11ea-94e4-54e1ad6637c3', '1d6714fc-ec25-11ea-94e4-54e1ad6637c3', 'Blur', 'cups', 4, 1, 1, 1);
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+
+-- Dumping structure for table nguyenminh.product_category
+CREATE TABLE IF NOT EXISTS `product_category` (
+  `id` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table nguyenminh.product_category: ~6 rows (approximately)
+/*!40000 ALTER TABLE `product_category` DISABLE KEYS */;
+INSERT INTO `product_category` (`id`, `name`) VALUES
+	('0d9773b0-ec25-11ea-94e4-54e1ad6637c3', 'Cat'),
+	('10bf601f-ec25-11ea-94e4-54e1ad6637c3', 'Dog'),
+	('1d6714fc-ec25-11ea-94e4-54e1ad6637c3', 'Blur'),
+	('205d2ea4-ec25-11ea-94e4-54e1ad6637c3', 'Young'),
+	('24c8c62c-ec25-11ea-94e4-54e1ad6637c3', 'Lis'),
+	('274fc99b-ec25-11ea-94e4-54e1ad6637c3', 'Nhu');
+/*!40000 ALTER TABLE `product_category` ENABLE KEYS */;
+
+-- Dumping structure for table nguyenminh.product_image
+CREATE TABLE IF NOT EXISTS `product_image` (
+  `id` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+  `file_name` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `file_type` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `product_id` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `data` mediumblob DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `FK_product_image_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table nguyenminh.product_image: ~0 rows (approximately)
+/*!40000 ALTER TABLE `product_image` DISABLE KEYS */;
+/*!40000 ALTER TABLE `product_image` ENABLE KEYS */;
+
+-- Dumping structure for table nguyenminh.role
+CREATE TABLE IF NOT EXISTS `role` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table nguyenminh.role: ~2 rows (approximately)
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` (`id`, `name`) VALUES
+	(1, 'ROLE_USER'),
+	(2, 'ROLE_ADMIN');
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+
+-- Dumping structure for table nguyenminh.sub_menu
+CREATE TABLE IF NOT EXISTS `sub_menu` (
+  `id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT uuid(),
+  `name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `icon` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `to` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table nguyenminh.sub_menu: ~2 rows (approximately)
+/*!40000 ALTER TABLE `sub_menu` DISABLE KEYS */;
+INSERT INTO `sub_menu` (`id`, `name`, `icon`, `to`) VALUES
+	('892aeaea-e8e3-11ea-99b3-54e1ad6637c3', 'Vận Chuyển Nhà', NULL, NULL),
+	('9e42d2a2-e8e3-11ea-99b3-54e1ad6637c3', 'Vận Chuyển Văn Phòng', NULL, NULL),
+	('a2b6eae3-e8e3-11ea-99b3-54e1ad6637c3', 'Vận Chuyển Phòng Trọ', NULL, NULL);
+/*!40000 ALTER TABLE `sub_menu` ENABLE KEYS */;
+
+-- Dumping structure for table nguyenminh.user
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `password` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table nguyenminh.user: ~1 rows (approximately)
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` (`id`, `username`, `password`, `email`) VALUES
+	(1, 'admin', '$2a$10$seQ2A7BC2CZXTyFlKDHq6OFLzLxzphiEMQesFK4z1V5n0iU4f3ENy', 'admin@gmail.com');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+
+-- Dumping structure for table nguyenminh.user_role
+CREATE TABLE IF NOT EXISTS `user_role` (
+  `user_id` int(11) NOT NULL,
+  `role_id` int(11) DEFAULT NULL,
+  KEY `user_id` (`user_id`),
+  KEY `role_id` (`role_id`),
+  CONSTRAINT `FK_user_role_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_user_role_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table nguyenminh.user_role: ~1 rows (approximately)
+/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
+	(1, 2);
+/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
+
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
